@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Listing</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/products.css">
+</head>
+<body>
+  <main class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+      <div>
+        <h1 class="h2 mb-1">Products</h1>
+        <p class="text-secondary mb-0">Browse, search, and filter available products.</p>
+      </div>
+      <a class="btn btn-outline-primary" href="/">Back to Home</a>
+    </div>
+
+    <section class="card shadow-sm mb-4" aria-label="Product search and filters">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-12 col-md-4">
+            <label for="searchInput" class="form-label">Search product</label>
+            <input id="searchInput" class="form-control" type="search" placeholder="Enter product name">
+          </div>
+          <div class="col-12 col-md-3">
+            <label for="brandFilter" class="form-label">Brand</label>
+            <select id="brandFilter" class="form-select">
+              <option value="">All brands</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-3">
+            <label for="categoryFilter" class="form-label">Category</label>
+            <select id="categoryFilter" class="form-select">
+              <option value="">All categories</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-2">
+            <label for="sortSelect" class="form-label">Sort by</label>
+            <select id="sortSelect" class="form-select">
+              <option value="name:asc">Name (A-Z)</option>
+              <option value="name:desc">Name (Z-A)</option>
+              <option value="price:asc">Price (low-high)</option>
+              <option value="price:desc">Price (high-low)</option>
+            </select>
+          </div>
+        </div>
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+          <button id="clearFilters" class="btn btn-outline-secondary btn-sm" type="button">Clear filters</button>
+          <label class="small text-secondary" for="pageSize">Products per page
+            <select id="pageSize" class="form-select form-select-sm d-inline-block ms-1" style="width:auto">
+              <option value="5" selected>5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <p id="resultCount" class="small text-secondary mb-0" aria-live="polite">Loading products...</p>
+    </div>
+
+    <div class="table-responsive card shadow-sm">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Product name</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Category</th>
+            <th scope="col" class="text-end">Price</th>
+          </tr>
+        </thead>
+        <tbody id="productsTableBody">
+          <tr><td colspan="5" class="text-center py-4">Loading products...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <nav class="mt-3" aria-label="Product pages">
+      <ul id="pagination" class="pagination justify-content-center flex-wrap"></ul>
+    </nav>
+
+    <div id="errorMessage" class="alert alert-danger d-none mt-3" role="alert"></div>
+  </main>
+  <script src="/js/products.js"></script>
+</body>
+</html>

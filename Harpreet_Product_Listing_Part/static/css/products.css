@@ -1,0 +1,20 @@
+body {
+  background: #f7f8fa;
+  color: #212529;
+}
+h1 {
+  font-weight: 700;
+}
+.card {
+  border: 1px solid #e6e9ee;
+  border-radius: 12px;
+}
+.table thead th {
+  white-space: nowrap;
+}
+.pagination .page-link {
+  cursor: pointer;
+}
+.pagination .page-item.disabled .page-link {
+  cursor: not-allowed;
+}
