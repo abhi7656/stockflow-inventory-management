@@ -33,14 +33,16 @@
                         new item to StockFlow.
                     </p>
 
-                    <form th:action="@{/products}" method="post">
+                    <form th:action="@{/products/save}"
+                          th:object="${product}"
+                          method="post">
 
                         <div class="mb-3">
-                            <label for="productName" class="form-label">
+                            <label for="name" class="form-label">
                                 Product Name
                             </label>
-                            <input type="text" id="productName"
-                                   name="productName"
+                            <input type="text" id="name"
+                                   th:field="*{name}"
                                    class="form-control"
                                    placeholder="Enter product name"
                                    required maxlength="120">
@@ -50,7 +52,8 @@
                             <label for="sku" class="form-label">
                                 SKU
                             </label>
-                            <input type="text" id="sku" name="sku"
+                            <input type="text" id="sku"
+                                   th:field="*{sku}"
                                    class="form-control"
                                    placeholder="Example: STK-1001"
                                    required maxlength="30">
@@ -60,8 +63,10 @@
                             <label for="description" class="form-label">
                                 Description
                             </label>
-                            <textarea id="description" name="description"
-                                      class="form-control" rows="3"
+                            <textarea id="description"
+                                      th:field="*{description}"
+                                      class="form-control"
+                                      rows="3"
                                       maxlength="500"></textarea>
                         </div>
 
@@ -70,7 +75,7 @@
                                 Unit Price ($)
                             </label>
                             <input type="number" id="unitPrice"
-                                   name="unitPrice"
+                                   th:field="*{unitPrice}"
                                    class="form-control"
                                    min="0.01" step="0.01"
                                    required>
@@ -81,7 +86,7 @@
                                 Brand ID
                             </label>
                             <input type="number" id="brandId"
-                                   name="brandId"
+                                   th:field="*{brandId}"
                                    class="form-control"
                                    min="1" required>
                         </div>
@@ -91,7 +96,7 @@
                                 Category ID
                             </label>
                             <input type="number" id="categoryId"
-                                   name="categoryId"
+                                   th:field="*{categoryId}"
                                    class="form-control"
                                    min="1" required>
                         </div>
@@ -111,7 +116,6 @@
 
                 </div>
             </div>
-
         </div>
     </div>
 </main>
