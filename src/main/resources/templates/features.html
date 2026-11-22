@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features | StockFlow</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark" style="background:#17345d;">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/}">StockFlow</a>
+        <a class="btn btn-outline-light" th:href="@{/}">Back to Home</a>
+    </div>
+</nav>
+
+<main class="container py-5">
+    <h1 class="text-center fw-bold mb-3">
+        StockFlow Features
+    </h1>
+    <p class="text-center text-muted mb-5">
+        Tools designed to simplify warehouse inventory management.
+    </p>
+
+    <div class="row g-4">
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100 p-3">
+                <div class="card-body">
+                    <h4>Product Management</h4>
+                    <p>Add, view, and organize product information.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100 p-3">
+                <div class="card-body">
+                    <h4>Inventory Tracking</h4>
+                    <p>Monitor product quantities and warehouse stock.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100 p-3">
+                <div class="card-body">
+                    <h4>Search and Filtering</h4>
+                    <p>Search products using names and categories.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100 p-3">
+                <div class="card-body">
+                    <h4>Sorting and Pagination</h4>
+                    <p>Sort products and navigate through pages of results.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+</body>
+</html>
