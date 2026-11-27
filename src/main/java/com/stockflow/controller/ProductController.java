@@ -4,9 +4,11 @@ import com.stockflow.model.Product;
 import com.stockflow.service.ProductService;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/products")
@@ -18,29 +20,40 @@ public class ProductController {
         this.productService = productService;
     }
 
-    // Display Edit Product form
+    // Display Edit Product form - ADMIN and STAFF only
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @GetMapping("/edit/{id}")
-    public String showEditProductForm(@PathVariable Long id, Model model) {
+    public String showEditProductForm(
+            @PathVariable Long id, Model model) {
 
         Product product = productService.getProductById(id)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Invalid product ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Invalid product ID: " + id));
 
         model.addAttribute("product", product);
 
         return "edit-product";
     }
 
-    // Delete product by ID
+    // Delete product - ADMIN only
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
+    public String deleteProduct(
+            @PathVariable Long id,
+            RedirectAttributes redirectAttributes) {
 
         productService.deleteProduct(id);
+
+        redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Product deleted successfully!"
+        );
 
         return "redirect:/products";
     }
 
-    // Display Add Product form
+    // Display Add Product form - ADMIN and STAFF only
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @GetMapping("/new")
     public String showAddProductForm(Model model) {
 
@@ -49,16 +62,26 @@ public class ProductController {
         return "add-product";
     }
 
-    // Save product to database
+    // Save or update product - ADMIN and STAFF only
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @PostMapping("/save")
-    public String saveProduct(@ModelAttribute Product product) {
+    public String saveProduct(
+            @ModelAttribute Product product,
+            RedirectAttributes redirectAttributes) {
 
         productService.saveProduct(product);
+
+        redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Product saved successfully!"
+        );
 
         return "redirect:/products";
     }
 
-    // Display products with search, filtering, sorting and pagination
+    // Display products with search, filtering,
+    // sorting and pagination - ADMIN and STAFF only
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @GetMapping
     public String listProducts(
 
@@ -87,6 +110,7 @@ public class ProductController {
                 && !sortBy.equals("name")
                 && !sortBy.equals("sku")
                 && !sortBy.equals("unitPrice")) {
+
             sortBy = "id";
         }
 
@@ -95,7 +119,8 @@ public class ProductController {
                 ? "desc"
                 : "asc";
 
-        // Execute combined search, filtering, sorting and pagination
+        // Execute combined search, filtering,
+        // sorting and pagination
         Page<Product> productPage =
                 productService.searchAndFilterProducts(
                         keyword,

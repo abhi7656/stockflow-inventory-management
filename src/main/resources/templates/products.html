@@ -1,14 +1,307 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<<<<<<< HEAD
+=======
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockFlow | Products</title>
+>>>>>>> a10daf3fb2be1171e69885481e378b65189d4c12
 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Product Management | StockFlow</title>
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          rel="stylesheet">
+
+    <!-- StockFlow Security Styles -->
+    <link rel="stylesheet" th:href="@{/css/security.css}">
+
+    <style>
+
+        body {
+            background: #f4f7fc;
+            font-family: Arial, sans-serif;
+            color: #1e293b;
+        }
+
+        /* Dashboard Header */
+
+        .dashboard-header {
+            background: linear-gradient(
+                120deg,
+                #14243d,
+                #1e40af,
+                #2563eb
+            );
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.15);
+        }
+
+        .dashboard-header h1 {
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .dashboard-header p {
+            color: #dbeafe;
+        }
+
+        .dashboard-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #bfdbfe;
+        }
+
+        .add-product-btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        /* Statistics Cards */
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e8edf5;
+            border-radius: 16px;
+            padding: 24px;
+            height: 100%;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+        }
+
+        .stat-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .icon-blue {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .icon-green {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .icon-purple {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            color: #14243d;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 0;
+        }
+
+        /* Product Table */
+
+        .inventory-card {
+            background: white;
+            border: 1px solid #e8edf5;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(15, 23, 42, 0.04);
+            overflow: hidden;
+        }
+
+        .inventory-header {
+            padding: 26px;
+            border-bottom: 1px solid #e8edf5;
+        }
+
+        .inventory-header h4 {
+            font-weight: 800;
+            color: #14243d;
+        }
+
+        .inventory-table {
+            margin-bottom: 0;
+        }
+
+        .inventory-table thead th {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 18px 16px;
+            white-space: nowrap;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .inventory-table tbody td {
+            padding: 20px 16px;
+            vertical-align: middle;
+            border-color: #edf2f7;
+            font-size: 14px;
+        }
+
+        .product-avatar {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .product-name {
+            color: #14243d;
+            font-weight: 700;
+        }
+
+        .product-description {
+            color: #64748b;
+            min-width: 160px;
+            max-width: 260px;
+            overflow-wrap: anywhere;
+        }
+
+        .sku-badge {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .id-badge {
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .price-value {
+            color: #15803d;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .action-btn {
+            border-radius: 8px;
+            padding: 7px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Empty Inventory */
+
+        .empty-state {
+            text-align: center;
+            padding: 65px 20px;
+        }
+
+        .empty-icon {
+            width: 90px;
+            height: 90px;
+            background: #eff6ff;
+            color: #2563eb;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+        }
+
+        /* Security Notice */
+
+        .security-notice {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+            padding: 18px 22px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        /* Delete Confirmation Modal */
+
+        .modal-content {
+            border: none;
+            border-radius: 20px;
+        }
+
+        .delete-icon {
+            width: 70px;
+            height: 70px;
+            background: #fee2e2;
+            color: #dc2626;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin: 0 auto 20px;
+        }
+
+        /* Footer */
+
+        footer {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+
+            .dashboard-header {
+                padding: 25px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 28px;
+            }
+
+            .inventory-header {
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
 </head>
+<<<<<<< HEAD
+
+<body>
+
+<!-- Reusable Role-Based Navigation -->
+=======
 <body class="bg-light">
 
 <nav class="navbar navbar-dark" style="background:#20365c;">
@@ -19,9 +312,111 @@
         </a>
     </div>
 </nav>
+>>>>>>> a10daf3fb2be1171e69885481e378b65189d4c12
 
-<main class="container py-5">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
+
+<main class="container-fluid px-3 px-lg-5 py-5">
+
+    <!-- Dashboard Header -->
+
+    <section class="dashboard-header mb-4">
+
+        <div class="d-flex flex-wrap justify-content-between
+                    align-items-center gap-4">
+
+            <div>
+
+                <span class="dashboard-label">
+                    <i class="bi bi-grid-fill me-2"></i>
+                    INVENTORY WORKSPACE
+                </span>
+
+                <h1 class="mt-2 mb-2">
+                    Product Management
+                </h1>
+
+                <p class="mb-0">
+                    Organize, update and securely manage
+                    your StockFlow inventory.
+                </p>
+
+            </div>
+
+            <!-- ADMIN and STAFF only -->
+
+            <a th:if="${canManageProducts}"
+               th:href="@{/products/new}"
+               class="btn btn-light add-product-btn">
+
+                <i class="bi bi-plus-circle-fill me-2"></i>
+                Add Product
+
+            </a>
+
+<<<<<<< HEAD
+        </div>
+
+    </section>
+
+
+    <!-- Success Notification -->
+
+    <div th:if="${successMessage != null}"
+         class="alert alert-success alert-dismissible
+                fade show shadow-sm rounded-3"
+         role="alert">
+
+        <i class="bi bi-check-circle-fill me-2"></i>
+
+        <strong>Success!</strong>
+
+        <span th:text="${successMessage}"></span>
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close">
+        </button>
+
+    </div>
+
+
+    <!-- Statistics Cards -->
+
+    <section class="row g-4 mb-4">
+
+        <!-- Total Products -->
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="stat-icon icon-blue">
+
+                        <i class="bi bi-box-seam"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="stat-label">
+                            TOTAL PRODUCTS
+                        </div>
+
+                        <h3 class="stat-value"
+                            th:text="${#lists.size(products)}">
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+=======
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
             <h1 class="fw-bold mb-1">Product Management</h1>
@@ -173,6 +568,7 @@
                     </tr>
                     </tbody>
                 </table>
+>>>>>>> a10daf3fb2be1171e69885481e378b65189d4c12
             </div>
 
             <!-- Pagination -->
@@ -236,13 +632,530 @@
             </div>
 
         </div>
+
+
+        <!-- Current User -->
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="stat-icon icon-purple">
+
+                        <i class="bi bi-person-circle"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="stat-label">
+                            CURRENT USER
+                        </div>
+
+                        <h5 class="fw-bold mb-1"
+                            th:text="${currentUsername}">
+                            Username
+                        </h5>
+
+                        <span class="role-badge"
+                              th:classappend="${'role-' + currentRole}"
+                              th:text="${currentRole}">
+                            ROLE
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Access Status -->
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="stat-icon icon-green">
+
+                        <i class="bi bi-shield-check"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="stat-label">
+                            ACCESS STATUS
+                        </div>
+
+                        <h5 class="fw-bold text-success mb-1">
+                            Authorized
+                        </h5>
+
+                        <small class="text-muted">
+                            Role-based access enabled
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Role-Based Security Notice -->
+
+    <div class="security-notice mb-4">
+
+        <div class="d-flex align-items-center gap-3">
+
+            <i class="bi bi-shield-lock-fill fs-4"></i>
+
+            <div th:if="${isAdmin}">
+
+                <strong>Administrator Access</strong>
+
+                <div>
+                    You have permission to view, create,
+                    edit and delete inventory products.
+                </div>
+
+            </div>
+
+            <div th:unless="${isAdmin}">
+
+                <strong>Staff Access</strong>
+
+                <div>
+                    You can view, create and edit products.
+                    Product deletion is restricted to administrators.
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
+
+    <!-- Inventory Table -->
+
+    <section class="inventory-card">
+
+        <div class="inventory-header">
+
+            <div class="d-flex flex-wrap justify-content-between
+                        align-items-center gap-3">
+
+                <div>
+
+                    <h4 class="mb-1">
+
+                        <i class="bi bi-boxes me-2 text-primary"></i>
+
+                        Inventory Products
+
+                    </h4>
+
+                    <p class="text-muted small mb-0">
+                        View and manage your registered products.
+                    </p>
+
+                </div>
+
+                <span class="badge rounded-pill
+                             text-bg-light border px-3 py-2">
+
+                    <span th:text="${#lists.size(products)}">
+                        0
+                    </span>
+
+                    Products
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Product Records -->
+
+        <div class="table-responsive"
+             th:unless="${#lists.isEmpty(products)}">
+
+            <table class="table table-hover inventory-table">
+
+                <thead>
+
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">SKU</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Brand ID</th>
+                        <th scope="col">Category ID</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr th:each="product : ${products}">
+
+                        <!-- Product ID -->
+
+                        <td>
+
+                            <span class="id-badge"
+                                  th:text="${'#' + product.id}">
+                                #1
+                            </span>
+
+                        </td>
+
+
+                        <!-- Product Name -->
+
+                        <td>
+
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="product-avatar">
+
+                                    <i class="bi bi-box-seam"></i>
+
+                                </div>
+
+                                <span class="product-name"
+                                      th:text="${product.name}">
+                                    Product Name
+                                </span>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- SKU -->
+
+                        <td>
+
+                            <span class="sku-badge"
+                                  th:text="${product.sku}">
+                                SKU-001
+                            </span>
+
+                        </td>
+
+
+                        <!-- Description -->
+
+                        <td class="product-description"
+                            th:text="${product.description}">
+                            Product description
+                        </td>
+
+
+                        <!-- Price -->
+
+                        <td>
+
+                            <span class="price-value"
+                                  th:text="${product.unitPrice != null
+                                  ? '$' + #numbers.formatDecimal(product.unitPrice, 1, 2)
+                                  : 'N/A'}">
+                                $0.00
+                            </span>
+
+                        </td>
+
+
+                        <!-- Brand ID -->
+
+                        <td th:text="${product.brandId}">
+                            1
+                        </td>
+
+
+                        <!-- Category ID -->
+
+                        <td th:text="${product.categoryId}">
+                            1
+                        </td>
+
+
+                        <!-- Role-Based Actions -->
+
+                        <td>
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                <!-- ADMIN and STAFF -->
+
+                                <a th:if="${canManageProducts}"
+                                   th:href="@{/products/edit/{id}(id=${product.id})}"
+                                   class="btn btn-outline-primary action-btn">
+
+                                    <i class="bi bi-pencil-square me-1"></i>
+
+                                    Edit
+
+                                </a>
+
+
+                                <!-- ADMIN ONLY -->
+
+                                <button th:if="${isAdmin}"
+                                        type="button"
+                                        class="btn btn-outline-danger action-btn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteProductModal"
+                                        th:attr="data-product-name=${product.name},
+                                        data-delete-url=@{/products/delete/{id}(id=${product.id})}">
+
+                                    <i class="bi bi-trash3 me-1"></i>
+
+                                    Delete
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- Empty Inventory State -->
+
+        <div th:if="${#lists.isEmpty(products)}"
+             class="empty-state">
+
+            <div class="empty-icon">
+
+                <i class="bi bi-box-seam"></i>
+
+            </div>
+
+            <h4 class="fw-bold">
+                Your inventory is empty
+            </h4>
+
+            <p class="text-muted">
+                Get started by adding your first product
+                to StockFlow.
+            </p>
+
+            <a th:if="${canManageProducts}"
+               th:href="@{/products/new}"
+               class="btn btn-primary rounded-3 px-4">
+
+                <i class="bi bi-plus-circle me-2"></i>
+
+                Add First Product
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+
+    <footer class="text-center mt-5">
+
+        <i class="bi bi-shield-check text-success me-1"></i>
+
+        StockFlow Secure Inventory Management
+
+        <div class="mt-2">
+
+            CPAN-228 | Web Application Development
+
+        </div>
+
+        <div class="mt-1">
+
+            Developed by Abhinass Singh,
+            Harpreet Kaur and Inderjeet Gharu
+
+        </div>
+
+    </footer>
 
 </main>
 
+<<<<<<< HEAD
+
+<!-- =========================================
+     ADMIN-ONLY DELETE CONFIRMATION MODAL
+     ========================================= -->
+
+<div th:if="${isAdmin}"
+     class="modal fade"
+     id="deleteProductModal"
+     tabindex="-1"
+     aria-labelledby="deleteModalTitle"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content shadow-lg">
+
+            <div class="modal-body text-center p-5">
+
+                <div class="delete-icon">
+
+                    <i class="bi bi-trash3-fill"></i>
+
+                </div>
+
+                <h4 id="deleteModalTitle" class="fw-bold">
+                    Delete Product?
+                </h4>
+
+                <p class="text-muted mt-3">
+
+                    Are you sure you want to delete
+
+                    <strong id="deleteProductName"></strong>?
+
+                </p>
+
+                <p class="small text-danger">
+
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+
+                    This action cannot be undone.
+
+                </p>
+
+                <!-- Secure POST Form -->
+
+                <form id="deleteProductForm"
+                      th:action="@{/products}"
+                      method="post">
+
+                    <div class="d-flex justify-content-center
+                                flex-wrap gap-3 mt-4">
+
+                        <button type="button"
+                                class="btn btn-light border px-4"
+                                data-bs-dismiss="modal">
+
+                            Cancel
+
+                        </button>
+
+                        <button type="submit"
+                                id="confirmDeleteButton"
+                                class="btn btn-danger px-4"
+                                disabled>
+
+                            <i class="bi bi-trash3 me-2"></i>
+
+                            Delete Product
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Bootstrap JavaScript -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- Delete Modal JavaScript -->
+
+<script>
+
+    const deleteModal = document.getElementById(
+        'deleteProductModal'
+    );
+
+    if (deleteModal) {
+
+        deleteModal.addEventListener(
+            'show.bs.modal',
+            function (event) {
+
+                const button = event.relatedTarget;
+
+                const confirmButton = document.getElementById(
+                    'confirmDeleteButton'
+                );
+
+                confirmButton.disabled = true;
+
+                if (!button) {
+                    return;
+                }
+
+                const productName = button.getAttribute(
+                    'data-product-name'
+                );
+
+                const deleteUrl = button.getAttribute(
+                    'data-delete-url'
+                );
+
+                if (!deleteUrl) {
+                    return;
+                }
+
+                document.getElementById(
+                    'deleteProductName'
+                ).textContent = productName;
+
+                document.getElementById(
+                    'deleteProductForm'
+                ).action = deleteUrl;
+
+                confirmButton.disabled = false;
+
+            }
+        );
+
+    }
+
+</script>
+=======
 <footer class="text-center text-muted py-4">
     StockFlow | CPAN-228 Web Application Development
 </footer>
+>>>>>>> a10daf3fb2be1171e69885481e378b65189d4c12
 
 </body>
+
 </html>

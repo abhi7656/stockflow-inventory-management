@@ -1,0 +1,134 @@
+/* =========================================
+   STOCKFLOW - SECURITY AND NAVIGATION
+   Developed by Abhinass Singh
+   ========================================= */
+
+:root {
+    --sf-navy: #14243d;
+    --sf-blue: #4f8cff;
+    --sf-white: #ffffff;
+    --sf-muted: #cbd5e1;
+}
+
+/* Navigation bar */
+
+.stockflow-navbar {
+    background: linear-gradient(
+        110deg,
+        #14243d,
+        #1e3155
+    );
+    min-height: 76px;
+    padding: 12px 0;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.15);
+}
+
+/* Brand */
+
+.stockflow-brand {
+    font-size: 1.65rem;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    margin-right: 35px;
+    color: var(--sf-white) !important;
+}
+
+.stockflow-brand span {
+    color: var(--sf-blue);
+}
+
+/* Navigation links */
+
+.stockflow-navbar .nav-link {
+    color: var(--sf-muted);
+    font-weight: 500;
+    padding: 10px 14px !important;
+    border-radius: 8px;
+    transition: background 0.2s ease,
+                color 0.2s ease;
+}
+
+.stockflow-navbar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.09);
+    color: white;
+}
+
+/* Profile button */
+
+.stockflow-profile {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    color: white;
+    padding: 10px 16px;
+    font-weight: 500;
+}
+
+.stockflow-profile:hover,
+.stockflow-profile:focus,
+.stockflow-profile.show {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+/* Role badges */
+
+.role-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    padding: 5px 9px;
+    border-radius: 6px;
+}
+
+.role-ADMIN {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+.role-STAFF {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.role-VIEWER {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+/* Dropdown menu */
+
+.stockflow-navbar .dropdown-menu {
+    min-width: 230px;
+    border-radius: 12px;
+    padding: 10px;
+    margin-top: 12px;
+}
+
+.stockflow-navbar .dropdown-item {
+    padding: 10px 14px;
+    border-radius: 7px;
+    transition: background 0.2s ease;
+}
+
+.stockflow-navbar .dropdown-item:hover {
+    background: #f1f5f9;
+}
+
+/* Responsive layout */
+
+@media (max-width: 991px) {
+
+    .stockflow-navbar .navbar-collapse {
+        padding-top: 15px;
+    }
+
+    .stockflow-profile {
+        margin-top: 10px;
+    }
+
+    .stockflow-navbar .dropdown-menu {
+        margin-bottom: 10px;
+    }
+}
