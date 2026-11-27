@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<nav th:fragment="navbar"
+     class="navbar navbar-expand-lg navbar-dark stockflow-navbar sticky-top"
+     th:with="authenticated=${#httpServletRequest != null}">
+
+    <div class="container-fluid px-lg-4">
+
+        <!-- StockFlow Branding -->
+        <a class="navbar-brand stockflow-brand" th:href="@{/}">
+            <i class="bi bi-box-seam-fill me-2"></i>
+            Stock<span>Flow</span>
+        </a>
+
+        <!-- Mobile Navigation -->
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#stockflowNavigation"
+                aria-controls="stockflowNavigation"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <div class="collapse navbar-collapse"
+             id="stockflowNavigation">
+
+            <!-- Main Navigation -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">
+                        <i class="bi bi-house-door me-1"></i>
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/about}">
+                        <i class="bi bi-info-circle me-1"></i>
+                        About
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/features}">
+                        <i class="bi bi-grid me-1"></i>
+                        Features
+                    </a>
+                </li>
+
+                <!-- ADMIN and STAFF -->
+                <li class="nav-item"
+                    th:if="${canManageProducts == true}">
+
+                    <a class="nav-link" th:href="@{/products}">
+                        <i class="bi bi-boxes me-1"></i>
+                        Products
+                    </a>
+
+                </li>
+
+            </ul>
+
+            <!-- Guest Navigation -->
+            <div class="d-flex align-items-center gap-2"
+                 th:if="${currentUsername == null}">
+
+                <a class="btn btn-outline-light"
+                   th:href="@{/login}">
+                    <i class="bi bi-box-arrow-in-right me-1"></i>
+                    Login
+                </a>
+
+            </div>
+
+            <!-- Authenticated User -->
+            <div class="dropdown"
+                 th:if="${currentUsername != null}">
+
+                <button class="btn stockflow-profile dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+
+                    <i class="bi bi-person-circle me-2"></i>
+
+                    <span th:text="${currentUsername}">
+                        Username
+                    </span>
+
+                    <span class="role-badge ms-2"
+                          th:classappend="${'role-' + currentRole}"
+                          th:text="${currentRole}">
+                        ROLE
+                    </span>
+
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+
+                    <li>
+                        <h6 class="dropdown-header">
+                            Signed in as
+                        </h6>
+                    </li>
+
+                    <li>
+                        <span class="dropdown-item-text fw-semibold"
+                              th:text="${currentUsername}">
+                            Username
+                        </span>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <form th:action="@{/logout}" method="post">
+
+                            <button type="submit"
+                                    class="dropdown-item text-danger">
+
+                                <i class="bi bi-box-arrow-right me-2"></i>
+                                Sign Out
+
+                            </button>
+
+                        </form>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+</body>
+</html>
