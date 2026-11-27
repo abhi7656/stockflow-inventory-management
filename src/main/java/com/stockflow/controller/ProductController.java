@@ -3,6 +3,7 @@ package com.stockflow.controller;
 import com.stockflow.model.Product;
 import com.stockflow.service.ProductService;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,15 +79,93 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    // Display all products - ADMIN and STAFF only
+    // Display products with search, filtering,
+    // sorting and pagination - ADMIN and STAFF only
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     @GetMapping
-    public String listProducts(Model model) {
+    public String listProducts(
 
-        model.addAttribute(
-                "products",
-                productService.getAllProducts()
-        );
+            @RequestParam(defaultValue = "") String keyword,
+
+            @RequestParam(required = false) Long brandId,
+
+            @RequestParam(required = false) Long categoryId,
+
+            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(defaultValue = "5") int size,
+
+            @RequestParam(defaultValue = "id") String sortBy,
+
+            @RequestParam(defaultValue = "asc") String direction,
+
+            Model model) {
+
+        // Validate page number and page size
+        page = Math.max(page, 0);
+        size = Math.max(1, Math.min(size, 100));
+
+        // Validate sorting field
+        if (!sortBy.equals("id")
+                && !sortBy.equals("name")
+                && !sortBy.equals("sku")
+                && !sortBy.equals("unitPrice")) {
+
+            sortBy = "id";
+        }
+
+        // Validate sorting direction
+        direction = "desc".equalsIgnoreCase(direction)
+                ? "desc"
+                : "asc";
+
+        // Execute combined search, filtering,
+        // sorting and pagination
+        Page<Product> productPage =
+                productService.searchAndFilterProducts(
+                        keyword,
+                        brandId,
+                        categoryId,
+                        page,
+                        size,
+                        sortBy,
+                        direction
+                );
+
+        // Handle page numbers beyond available results
+        if (productPage.getTotalPages() > 0
+                && page >= productPage.getTotalPages()) {
+
+            page = productPage.getTotalPages() - 1;
+
+            productPage = productService.searchAndFilterProducts(
+                    keyword,
+                    brandId,
+                    categoryId,
+                    page,
+                    size,
+                    sortBy,
+                    direction
+            );
+        }
+
+        // Send product data to HTML
+        model.addAttribute("products", productPage.getContent());
+
+        // Pagination information
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("totalItems", productPage.getTotalElements());
+
+        // Preserve search and filter values
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("brandId", brandId);
+        model.addAttribute("categoryId", categoryId);
+
+        // Preserve sorting and pagination settings
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("direction", direction);
+        model.addAttribute("size", size);
 
         return "products";
     }
