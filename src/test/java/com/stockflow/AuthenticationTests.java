@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -155,7 +154,7 @@ class AuthenticationTests {
     }
     @Test void guestCannotAccessProtectedProducts() throws Exception {
         mockMvc.perform(get("/products")).andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("/login"));
     }
     @Test void registrationCannotAssignAdminRole() throws Exception {
         mockMvc.perform(registration("testuser", "test@example.com", PASSWORD, PASSWORD).param("role", "ADMIN"))
