@@ -1,36 +1,103 @@
 package com.stockflow;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-
-import org.springframework.test.web.servlet.MockMvc;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
-
-
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
-
+import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.stockflow.model.User;
+import com.stockflow.repository.UserRepository;
+
+// Role-Based Security Testing - Abhinass Singh
+// Database Authentication Integration - Harpreet Kaur
 
 @SpringBootTest(properties = {
         "spring.datasource.url=jdbc:h2:mem:stockflow-security-tests",
-        "spring.jpa.hibernate.ddl-auto=create-drop"
+        "spring.datasource.username=sa",
+        "spring.datasource.password=",
+        "spring.jpa.hibernate.ddl-auto=create-drop",
+        "STOCKFLOW_ADMIN_PASSWORD=",
+        "STOCKFLOW_STAFF_PASSWORD=",
+        "STOCKFLOW_VIEWER_PASSWORD="
 })
 @AutoConfigureMockMvc
 class SecurityConfigTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    // Prepare database accounts before each test
+    @SuppressWarnings("unused")
+    @BeforeEach
+    void setUp() {
+
+        userRepository.deleteAll();
+
+        createTestUser(
+                "Administrator",
+                "admin",
+                "admin@stockflow.example",
+                "Admin@123",
+                "ADMIN"
+        );
+
+        createTestUser(
+                "Staff Member",
+                "staff",
+                "staff@stockflow.example",
+                "Staff@123",
+                "STAFF"
+        );
+
+        createTestUser(
+                "Viewer",
+                "viewer",
+                "viewer@stockflow.example",
+                "Viewer@123",
+                "VIEWER"
+        );
+    }
+
+    // Create a database-backed test account
+    private void createTestUser(
+            String fullName,
+            String username,
+            String email,
+            String password,
+            String role) {
+
+        User testUser = new User();
+
+        testUser.setFullName(fullName);
+        testUser.setUsername(username);
+        testUser.setEmail(email);
+        testUser.setPassword(
+                passwordEncoder.encode(password)
+        );
+        testUser.setRole(role);
+        testUser.setEnabled(true);
+
+        userRepository.save(testUser);
+    }
 
     // TEST 01
     @Test
@@ -61,7 +128,8 @@ class SecurityConfigTests {
     void guestCanAccessLoginPage() throws Exception {
 
         mockMvc.perform(get("/login"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(view().name("login"));
     }
 
     // TEST 05
@@ -183,7 +251,8 @@ class SecurityConfigTests {
                         .password("Admin@123"))
                 .andExpect(authenticated()
                         .withUsername("admin")
-                        .withRoles("ADMIN"));
+                        .withRoles("ADMIN"))
+                .andExpect(redirectedUrl("/"));
     }
 
     // TEST 18
@@ -195,7 +264,8 @@ class SecurityConfigTests {
                         .password("Staff@123"))
                 .andExpect(authenticated()
                         .withUsername("staff")
-                        .withRoles("STAFF"));
+                        .withRoles("STAFF"))
+                .andExpect(redirectedUrl("/"));
     }
 
     // TEST 19
@@ -207,7 +277,8 @@ class SecurityConfigTests {
                         .password("Viewer@123"))
                 .andExpect(authenticated()
                         .withUsername("viewer")
-                        .withRoles("VIEWER"));
+                        .withRoles("VIEWER"))
+                .andExpect(redirectedUrl("/"));
     }
 
     // TEST 20
@@ -221,15 +292,14 @@ class SecurityConfigTests {
                 .andExpect(redirectedUrl("/login?error"));
     }
 
-  // TEST 21: Secure logout
-@Test
-void logoutClearsAuthentication() throws Exception {
+    // TEST 21
+    @Test
+    void logoutClearsAuthentication() throws Exception {
 
-    mockMvc.perform(post("/logout")
-                    .with(user("staff").roles("STAFF"))
-                    .with(csrf()))
-            .andExpect(unauthenticated())
-            .andExpect(redirectedUrl("/login?logout"));
-}
-
+        mockMvc.perform(post("/logout")
+                        .with(user("staff").roles("STAFF"))
+                        .with(csrf()))
+                .andExpect(unauthenticated())
+                .andExpect(redirectedUrl("/login?logout"));
+    }
 }
