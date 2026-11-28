@@ -1,24 +1,21 @@
 package com.stockflow.config;
 
 import jakarta.servlet.DispatcherType;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.stockflow.service.CustomUserDetailsService;
+
+// Role-Based Security - Abhinass Singh
+// Database Authentication - Harpreet Kaur
 
 @Configuration
 @EnableWebSecurity
@@ -31,12 +28,18 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Role-based security configuration
     @Bean
     public SecurityFilterChain securityFilterChain(
-            HttpSecurity http) throws Exception {
+            HttpSecurity http,
+            CustomUserDetailsService customUserDetailsService)
+            throws Exception {
 
         http
+
+            // Database-backed authentication
+            .userDetailsService(customUserDetailsService)
+
+            // Role-based authorization
             .authorizeHttpRequests(auth -> auth
 
                 // Allow custom error page rendering
@@ -74,8 +77,10 @@ public class SecurityConfig {
                 ).hasRole("ADMIN")
 
                 // Product management
-                .requestMatchers("/products", "/products/**")
-                .hasAnyRole("ADMIN", "STAFF")
+                .requestMatchers(
+                        "/products",
+                        "/products/**"
+                ).hasAnyRole("ADMIN", "STAFF")
 
                 // Inventory dashboard and statistics API
                 .requestMatchers(
@@ -84,20 +89,27 @@ public class SecurityConfig {
                 ).hasAnyRole("ADMIN", "STAFF")
 
                 // Product catalog
-                .requestMatchers("/catalog", "/catalog/**")
-                .hasAnyRole("ADMIN", "STAFF", "VIEWER")
+                .requestMatchers(
+                        "/catalog",
+                        "/catalog/**"
+                ).hasAnyRole("ADMIN", "STAFF", "VIEWER")
 
                 // Deny unconfigured routes
                 .anyRequest().denyAll()
             )
 
-            // Login configuration
+            // Custom login page - Harpreet Kaur
             .formLogin(form -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .defaultSuccessUrl("/", true)
+                .failureUrl("/login?error")
                 .permitAll()
             )
 
-            // Logout configuration
+            // Secure logout
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
@@ -108,40 +120,5 @@ public class SecurityConfig {
             );
 
         return http.build();
-    }
-
-    // Temporary development accounts
-    // Passwords are loaded from environment variables.
-    // Remove this bean when database authentication is integrated.
-    @Bean
-    public UserDetailsService userDetailsService(
-            PasswordEncoder passwordEncoder,
-            @Value("${STOCKFLOW_ADMIN_PASSWORD}") String adminPassword,
-            @Value("${STOCKFLOW_STAFF_PASSWORD}") String staffPassword,
-            @Value("${STOCKFLOW_VIEWER_PASSWORD}") String viewerPassword) {
-
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder.encode(adminPassword))
-                .roles("ADMIN")
-                .build();
-
-        UserDetails staff = User.builder()
-                .username("staff")
-                .password(passwordEncoder.encode(staffPassword))
-                .roles("STAFF")
-                .build();
-
-        UserDetails viewer = User.builder()
-                .username("viewer")
-                .password(passwordEncoder.encode(viewerPassword))
-                .roles("VIEWER")
-                .build();
-
-        return new InMemoryUserDetailsManager(
-                admin,
-                staff,
-                viewer
-        );
     }
 }
